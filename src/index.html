@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Sandbox Manager</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div style="padding: 20px;">
+        <h1>🐳 Sandbox Manager</h1>
+        <p>One-click management for your Docker security environment.</p>
+
+        <div id="controls" style="margin-bottom: 20px;">
+            <button id="start-btn" style="background-color: green; color: white; padding: 10px 20px; border: none; cursor: pointer; margin-right: 10px;">Start Sandbox</button>
+            <button id="stop-btn" style="background-color: orange; color: white; padding: 10px 20px; border: none; cursor: pointer; margin-right: 10px;">Stop Sandbox</button>
+            <button id="reset-btn" style="background-color: red; color: white; padding: 10px 20px; border: none; cursor: pointer;">Reset & Cleanup</button>
+        </div>
+
+        <h2>Live Status (Basic Log Viewer):</h2>
+        <textarea id="output-log" rows="15" cols="80" readonly style="width: 100%; height: 300px; font-family: monospace; background-color: #333; color: white; padding: 10px; border: 1px solid #555;"></textarea>
+    </div>
+
+    <script src="./renderer.js"></script>
+</body>
+</html>

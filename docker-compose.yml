@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  mitmproxy:
+    image: mitmproxy/mitmproxy
+    container_name: mitmproxy
+    ports:
+      # Explicitly bind to 0.0.0.0 for reliable host accessibility
+      - "0.0.0.0:8080:8080"
+      - "0.0.0.0:8081:8081"
+    volumes:
+      # Maps the host's ./logs folder to the container's log directory
+      - ./logs:/home/mitmproxy/.mitmproxy
+    # CRITICAL FIX: Use -w (write) to save all intercepted flows to traffic.log
+    command: mitmdump -q -w /home/mitmproxy/.mitmproxy/traffic.log
+    networks:
+      - sandbox-net
+    dns:
+      - 1.1.1.2 
+
+  browser:
+    image: ghcr.io/linuxserver/firefox:latest
+    container_name: sandbox-browser
+    depends_on:
+      - mitmproxy
+    environment:
+      # Forces browser traffic through the mitmproxy container
+      - HTTP_PROXY=http://mitmproxy:8080
+      - HTTPS_PROXY=http://mitmproxy:8080
+      - DOCKER_MODS=linuxserver/mods:firefox-proxy
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - VNC_PASSWORD=test
+    volumes:
+      - ./browser-data:/config
+    ports:
+      # Explicitly bind to 0.0.0.0 for VNC access
+      - "0.0.0.0:3000:3000"
+    networks:
+      - sandbox-net
+    dns:
+      - 1.1.1.2
+
+networks:
+  sandbox-net:
+    driver: bridge
